@@ -46,8 +46,14 @@ router.post('/login',async (req,res)=>{
     if(!user) return res.status(400).send("Invalid Credentials")
 const validPass=await bcrypt.compare(req.body.password,user.password)
 if(!validPass) return res.status(400).send("Incorrect Password")
+//Create and Assign a JWT token
 
+
+ const token=jwt.sign({_id:user._id},process.env.TOKEN_SECRET)
+ res.header("auth-token",token).send(token);
 res.status(500).send("welcome  "+user.email)
+
+
 })
 
 module.exports=router;
